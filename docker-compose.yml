@@ -66,6 +66,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: bhavneetsingh01/advanced-web-service:latest
     environment:
       MYSQL_HOST: db
       REDIS_HOST: cache
