@@ -1,0 +1,45 @@
+name: Docker CI/CD
+
+# Trigger the workflow on code push to the main branch
+on:
+  push:
+    branches:
+      - main
+
+# Define the workflow jobs
+jobs:
+  build:
+    # Run on an Ubuntu virtual machine
+    runs-on: ubuntu-latest
+
+    # Steps to execute
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Install Docker Compose (if needed)
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+      # Step 4: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # Step 5: Build the Docker image
+      - name: Build Docker Image
+        run: docker-compose build
+
+      # Step 6: Verify Docker images are built
+      - name: Verify Docker Images
+        run: |
+          docker images
+      # Step 7: Push Docker Images
+      - name: Push Docker Images
+        run: |
+          docker push bhavneetsingh01/advanced-web-service:latest
