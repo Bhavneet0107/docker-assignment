@@ -1,0 +1,102 @@
+# services:
+#   web:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - api
+#     networks:
+#       - app-network     
+
+#   api:
+#     build:
+#       context: ./backend
+#       dockerfile: Dockerfile
+#     environment:
+#       MYSQL_HOST: db
+#       REDIS_HOST: cache
+#     ports:
+#       - "5000:5000"
+#     depends_on:
+#       - db
+#       - cache
+#     networks:
+#       - app-network    
+
+#   db:
+#     image: mysql:8
+#     environment:
+#       MYSQL_ROOT_PASSWORD: rootpassword
+#       MYSQL_DATABASE: productdb
+#     volumes:
+#       - mysql-data:/var/lib/mysql
+#     networks:
+#       - app-network    
+
+#   cache:
+#     image: redis:alpine
+#     ports:
+#       - "6380:6379"
+#     networks:
+#       - app-network    
+
+# volumes:
+#   mysql-data:
+
+# networks:
+#   app-network:
+#     driver: bridge  
+
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - app-network     
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_HOST: db
+      REDIS_HOST: cache
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - cache
+    networks:
+      - app-network    
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: productdb
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network    
+
+  cache:
+    image: redis:alpine
+    ports:
+      - "6380:6379"
+    networks:
+      - app-network    
+
+volumes:
+  mysql-data:
+
+networks:
+  app-network:
+    driver: bridge
