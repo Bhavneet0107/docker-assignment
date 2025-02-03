@@ -1,11 +1,25 @@
-import React from 'react';
 
-const ProductList = ({ products }) => {
+import React, { useEffect, useState } from 'react';
+
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching products:', error);
+      });
+  }, []);
+
   return (
     <div>
-      <h2>Product List</h2>
+      <h1>Product List</h1>
       <ul>
-        {products?.map((product) => (
+        {products.map((product) => (
           <li key={product.id}>
             {product.name} - ${product.price}
           </li>

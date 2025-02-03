@@ -50,32 +50,32 @@
 #   app-network:
 #     driver: bridge  
 
-services:
-  web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - api
-    networks:
-      - app-network     
+version: '3.8'
 
-  api:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    environment:
-      MYSQL_HOST: db
-      REDIS_HOST: cache
+services:
+  backend:
+    build: ./backend
     ports:
       - "5000:5000"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=rootpassword
+      - MYSQL_DATABASE=productdb
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
     depends_on:
       - db
       - cache
     networks:
-      - app-network    
+      - app-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
 
   db:
     image: mysql:8
@@ -84,16 +84,17 @@ services:
       MYSQL_DATABASE: productdb
     volumes:
       - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
     networks:
-      - app-network    
+      - app-network
 
   cache:
-    image: redis:alpine
+    image: redis:latest
     ports:
-      - "6380:6379"
+      - "6379:6379"
     networks:
-      - app-network    
-
+      - app-network
 volumes:
   mysql-data:
 
