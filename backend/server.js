@@ -5,7 +5,7 @@ const { getProducts, addProduct } = require('./api/product');
 
 const app = express();
 
-// Enable CORS
+
 app.use(
   cors({
     origin: 'http://localhost:3000', // Allow frontend's origin
