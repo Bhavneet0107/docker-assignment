@@ -55,6 +55,7 @@ version: '3.8'
 services:
   backend:
     build: ./backend
+    image: bhavneetsingh01/advanced-web-service:latest 
     ports:
       - "5000:5000"
     environment:
